@@ -1,5 +1,7 @@
 package ru.netology.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 import ru.netology.repository.PostRepository;
@@ -7,20 +9,24 @@ import ru.netology.repository.PostRepository;
 import java.util.List;
 
 import java.util.List;
+import java.util.Optional;
 
+// Сервис
+@Service
 public class PostService {
   private final PostRepository repository;
 
+  @Autowired
   public PostService(PostRepository repository) {
     this.repository = repository;
   }
 
   public List<Post> all() {
-    return repository.all();
+    return repository.findAll();
   }
 
-  public Post getById(long id) {
-    return repository.getById(id).orElseThrow(NotFoundException::new);
+  public Optional<Post> getById(long id) {
+    return repository.findById(id);
   }
 
   public Post save(Post post) {
@@ -28,11 +34,6 @@ public class PostService {
   }
 
   public void removeById(long id) {
-    if (repository.getById(id).isEmpty()) {
-      throw new NotFoundException();
-    }
     repository.removeById(id);
   }
 }
-
-
